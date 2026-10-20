@@ -6,24 +6,29 @@ import Header from './Header';
 export default function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const closeSidebar = () => setSidebarOpen(false);
+  const toggleSidebar = () => setSidebarOpen((prev) => !prev);
+
   return (
     <div className="app-shell flex min-h-screen w-full">
       {sidebarOpen && (
-        <div
-          className="sidebar-overlay active md:hidden"
-          onClick={() => setSidebarOpen(false)}
-          aria-hidden="true"
+        <button
+          type="button"
+          className="sidebar-overlay md:hidden"
+          onClick={closeSidebar}
+          aria-label="Close navigation drawer"
         />
       )}
 
       <aside
         className={`sidebar ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}
+        aria-label="Main navigation"
       >
-        <Sidebar onClose={() => setSidebarOpen(false)} />
+        <Sidebar onClose={closeSidebar} />
       </aside>
 
       <div className="main-content flex min-w-0 flex-1 flex-col">
-        <Header onMenuClick={() => setSidebarOpen(true)} />
+        <Header onMenuClick={toggleSidebar} />
         <main className="min-w-0 flex-1 bg-slate-50 p-3 sm:p-4 md:p-6">
           <Outlet />
         </main>
