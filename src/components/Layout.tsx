@@ -7,32 +7,24 @@ export default function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
-      {/* Mobile overlay */}
+    <div className="app-shell flex min-h-screen w-full">
       {sidebarOpen && (
         <div
-          style={{
-            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)',
-            zIndex: 35, display: 'block',
-          }}
+          className="sidebar-overlay active md:hidden"
           onClick={() => setSidebarOpen(false)}
+          aria-hidden="true"
         />
       )}
 
-      {/* Sidebar — always rendered; on mobile it slides in/out */}
       <aside
-        className="sidebar"
-        style={{
-          transform: sidebarOpen ? 'translateX(0)' : undefined,
-        }}
+        className={`sidebar ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}
       >
         <Sidebar onClose={() => setSidebarOpen(false)} />
       </aside>
 
-      {/* Main content */}
-      <div className="main-content" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+      <div className="main-content flex min-w-0 flex-1 flex-col">
         <Header onMenuClick={() => setSidebarOpen(true)} />
-        <main style={{ flex: 1, padding: '24px', background: 'rgb(248 250 252)' }}>
+        <main className="min-w-0 flex-1 bg-slate-50 p-3 sm:p-4 md:p-6">
           <Outlet />
         </main>
       </div>

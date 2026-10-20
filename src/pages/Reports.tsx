@@ -95,7 +95,7 @@ export default function Reports() {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
         {[
           { label: 'Expected Revenue', value: formatCurrency(expected), icon: <DollarSign size={18} className="text-blue-600" />, color: 'bg-blue-50', text: 'text-blue-600' },
           { label: 'Collected Revenue', value: formatCurrency(collected), icon: <TrendingUp size={18} className="text-green-600" />, color: 'bg-green-50', text: 'text-green-600' },
@@ -115,7 +115,7 @@ export default function Reports() {
       </div>
 
       {/* Monthly Collections Chart */}
-      <div className="card p-5 mb-5">
+      <div className="card min-w-0 p-4 sm:p-5 mb-5">
         <h3 className="text-sm font-semibold text-slate-700 mb-4">Expected vs Collected (Monthly)</h3>
         <ResponsiveContainer width="100%" height={250}>
           <BarChart data={monthlyData} barGap={4}>
@@ -134,9 +134,9 @@ export default function Reports() {
         </ResponsiveContainer>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-5">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 mb-5">
         {/* Fee Status Distribution */}
-        <div className="card p-5">
+        <div className="card min-w-0 p-4 sm:p-5">
           <h3 className="text-sm font-semibold text-slate-700 mb-4">Fee Status Distribution</h3>
           <ResponsiveContainer width="100%" height={220}>
             <PieChart>
@@ -152,7 +152,7 @@ export default function Reports() {
         </div>
 
         {/* Course Revenue */}
-        <div className="card p-5 lg:col-span-2">
+        <div className="card min-w-0 p-4 sm:p-5 lg:col-span-2">
           <h3 className="text-sm font-semibold text-slate-700 mb-4">Course-wise Revenue</h3>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={courseData} barSize={28}>
@@ -175,7 +175,7 @@ export default function Reports() {
       </div>
 
       {/* Admissions Trend */}
-      <div className="card p-5">
+      <div className="card min-w-0 p-4 sm:p-5">
         <h3 className="text-sm font-semibold text-slate-700 mb-4">Admissions Trend</h3>
         <ResponsiveContainer width="100%" height={200}>
           <LineChart data={admissionsData}>

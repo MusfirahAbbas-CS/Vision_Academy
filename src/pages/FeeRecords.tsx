@@ -12,128 +12,114 @@ export default function FeeRecords() {
   const [filterStatus, setFilterStatus] = useState('');
   const [filterMonth, setFilterMonth] = useState('');
 
-  const allMonths = useMemo(() => {
-    const set = new Set<string>();
-    state.feeRecords.forEach(r => set.add(r.month));
-    return [...set].sort().reverse();
-  }, [state.feeRecords]);
-
-  const rows = useMemo(() => {
-    return state.feeRecords
-      .filter(r => {
-        const student = state.students.find(s => s.id === r.studentId);
-        if (!student) return false;
-        if (filterStatus && r.status !== filterStatus) return false;
-        if (filterMonth && r.month !== filterMonth) return false;
-        if (search) {
-          const q = search.toLowerCase();
-          return (
-            student.name.toLowerCase().includes(q) ||
-            student.admissionNo.toLowerCase().includes(q)
-          );
-        }
-        return true;
-      })
-      .map(r => {
-        const student = state.students.find(s => s.id === r.studentId)!;
-        return { ...r, student };
-      })
-      .sort((a, b) => b.month.localeCompare(a.month) || a.student.name.localeCompare(b.student.name));
-  }, [state.feeRecords, state.students, search, filterStatus, filterMonth]);
+  const allMonths = useMemo(() => [...new Set(state.feeRecords.map(record => record.month))].sort().reverse(), [state.feeRecords]);
+  const rows = useMemo(() => state.feeRecords
+    .filter(record => {
+      const student = state.students.find(s => s.id === record.studentId);
+      if (!student) return false;
+      if (filterStatus && record.status !== filterStatus) return false;
+      if (filterMonth && record.month !== filterMonth) return false;
+      if (!search) return true;
+      const query = search.toLowerCase();
+      return student.name.toLowerCase().includes(query) || student.admissionNo.toLowerCase().includes(query);
+    })
+    .map(record => ({ ...record, student: state.students.find(s => s.id === record.studentId)! }))
+    .sort((a, b) => b.month.localeCompare(a.month) || a.student.name.localeCompare(b.student.name)),
+  [state.feeRecords, state.students, search, filterStatus, filterMonth]);
 
   const totals = useMemo(() => ({
-    payable: rows.reduce((s, r) => s + r.payable, 0),
-    paid: rows.reduce((s, r) => s + r.paid, 0),
-    remaining: rows.reduce((s, r) => s + r.remaining, 0),
+    payable: rows.reduce((sum, row) => sum + row.payable, 0),
+    paid: rows.reduce((sum, row) => sum + row.paid, 0),
+    remaining: rows.reduce((sum, row) => sum + row.remaining, 0),
   }), [rows]);
 
+  const courseNames = (student: typeof rows[number]['student']) =>
+    student.courseIds.map(courseId => getCourse(courseId)?.name).filter(Boolean).join(', ');
+
+  const clearFilters = () => { setSearch(''); setFilterStatus(''); setFilterMonth(''); };
+
   return (
-    <div>
+    <div className="w-full min-w-0">
       <div className="page-header">
-        <div>
-          <h1 className="page-title">Fee Records</h1>
-          <p className="page-subtitle">{rows.length} records shown</p>
-        </div>
+        <div><h1 className="page-title">Fee Records</h1><p className="page-subtitle">{rows.length} records shown</p></div>
       </div>
 
-      {/* Summary */}
-      <div className="grid grid-cols-3 gap-4 mb-4">
+      <div className="mb-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
         {[
           { label: 'Total Payable', value: totals.payable, color: 'text-slate-700' },
           { label: 'Total Collected', value: totals.paid, color: 'text-green-600' },
           { label: 'Total Remaining', value: totals.remaining, color: 'text-red-500' },
         ].map(item => (
           <div key={item.label} className="card px-4 py-3">
-            <p className="text-xs text-slate-400 mb-1">{item.label}</p>
+            <p className="mb-1 text-xs text-slate-500">{item.label}</p>
             <p className={`text-base font-bold ${item.color}`}>{formatCurrency(item.value)}</p>
           </div>
         ))}
       </div>
 
-      {/* Filters */}
-      <div className="card p-4 mb-4 flex flex-wrap gap-3">
-        <div className="search-bar flex-1 min-w-[200px]">
+      <div className="card mb-4 grid grid-cols-1 gap-3 p-3 sm:p-4 md:grid-cols-3">
+        <div className="search-bar min-w-0">
           <Search size={15} className="search-icon" />
           <input id="fee-records-search" className="input" placeholder="Search student name or admission no…" value={search} onChange={e => setSearch(e.target.value)} />
         </div>
-        <select className="input w-auto min-w-[130px]" value={filterMonth} onChange={e => setFilterMonth(e.target.value)} id="filter-month">
+        <select className="input w-full min-w-0" value={filterMonth} onChange={e => setFilterMonth(e.target.value)} id="filter-month">
           <option value="">All Months</option>
-          {allMonths.map(m => <option key={m} value={m}>{m}</option>)}
+          {allMonths.map(month => <option key={month} value={month}>{month}</option>)}
         </select>
-        <select className="input w-auto min-w-[130px]" value={filterStatus} onChange={e => setFilterStatus(e.target.value)} id="filter-fee-status">
+        <select className="input w-full min-w-0" value={filterStatus} onChange={e => setFilterStatus(e.target.value)} id="filter-fee-status">
           <option value="">All Status</option>
-          {['PAID', 'PARTIAL', 'UNPAID', 'WAIVED'].map(s => <option key={s} value={s}>{s}</option>)}
+          {['PAID', 'PARTIAL', 'UNPAID', 'WAIVED'].map(status => <option key={status} value={status}>{status}</option>)}
         </select>
         {(search || filterStatus || filterMonth) && (
-          <button className="btn btn-secondary btn-sm" onClick={() => { setSearch(''); setFilterStatus(''); setFilterMonth(''); }}>Clear</button>
+          <button className="btn btn-secondary w-full md:col-span-3 md:w-auto md:justify-self-end" onClick={clearFilters}>Clear</button>
         )}
       </div>
 
-      <div className="card">
+      <div className="card hidden md:block">
         <div className="table-wrapper border-0 rounded-none">
           <table>
-            <thead>
-              <tr>
-                <th>Student</th>
-                <th>Month</th>
-                <th>Course</th>
-                <th>Payable</th>
-                <th>Paid</th>
-                <th>Remaining</th>
-                <th>Status</th>
-                <th>Payments</th>
-              </tr>
-            </thead>
+            <thead><tr><th>Student</th><th>Month</th><th>Course</th><th>Payable</th><th>Paid</th><th>Remaining</th><th>Status</th><th>Payments</th></tr></thead>
             <tbody>
               {rows.length === 0 ? (
-                <tr><td colSpan={8} className="text-center py-8 text-slate-400">No records found</td></tr>
-              ) : rows.map(r => {
-                const courses = r.student.courseIds.map(courseId => getCourse(courseId)?.name).filter(Boolean);
-                return (
-                  <tr key={r.id}>
-                    <td>
-                      <div>
-                        <p className="font-medium text-slate-700">{r.student.name}</p>
-                        <p className="text-xs text-slate-400">{r.student.admissionNo}</p>
-                      </div>
-                    </td>
-                    <td className="text-slate-600">{r.month}</td>
-                    <td className="text-slate-600 text-xs">{courses.join(', ')}</td>
-                    <td>{formatCurrency(r.payable)}</td>
-                    <td className="text-green-600 font-medium">{formatCurrency(r.paid)}</td>
-                    <td className={r.remaining > 0 ? 'text-red-500 font-medium' : 'text-slate-400'}>
-                      {formatCurrency(r.remaining)}
-                    </td>
-                    <td>
-                      <span className={`badge ${FEE_STATUS_COLORS[r.status]}`}>{r.status}</span>
-                    </td>
-                    <td className="text-slate-500">{r.payments.length}</td>
-                  </tr>
-                );
-              })}
+                <tr><td colSpan={8} className="py-8 text-center text-slate-400">No records found</td></tr>
+              ) : rows.map(record => (
+                <tr key={record.id}>
+                  <td><p className="font-medium text-slate-700">{record.student.name}</p><p className="text-xs text-slate-500">{record.student.admissionNo}</p></td>
+                  <td className="text-slate-600">{record.month}</td>
+                  <td className="text-slate-600">{courseNames(record.student)}</td>
+                  <td>{formatCurrency(record.payable)}</td>
+                  <td className="font-medium text-green-600">{formatCurrency(record.paid)}</td>
+                  <td className={record.remaining > 0 ? 'font-medium text-red-500' : 'text-slate-500'}>{formatCurrency(record.remaining)}</td>
+                  <td><span className={`badge ${FEE_STATUS_COLORS[record.status]}`}>{record.status}</span></td>
+                  <td className="text-slate-500">{record.payments.length}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
+      </div>
+
+      <div className="space-y-3 md:hidden">
+        {rows.length === 0 ? (
+          <div className="card p-6 text-center text-slate-400">No records found</div>
+        ) : rows.map(record => (
+          <article key={record.id} className="card min-w-0 p-4">
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <h2 className="break-words font-semibold text-slate-800">{record.student.name}</h2>
+                <p className="text-sm text-slate-500">{record.student.admissionNo} · {record.month}</p>
+                <p className="mt-1 break-words text-sm text-slate-600">{courseNames(record.student)}</p>
+              </div>
+              <span className={`badge shrink-0 ${FEE_STATUS_COLORS[record.status]}`}>{record.status}</span>
+            </div>
+            <dl className="mt-4 grid grid-cols-2 gap-3 border-t border-slate-100 pt-3 text-sm">
+              <div><dt className="text-slate-500">Payable</dt><dd className="font-medium">{formatCurrency(record.payable)}</dd></div>
+              <div><dt className="text-slate-500">Paid</dt><dd className="font-medium text-green-600">{formatCurrency(record.paid)}</dd></div>
+              <div><dt className="text-slate-500">Remaining</dt><dd className={`font-medium ${record.remaining > 0 ? 'text-red-500' : 'text-slate-700'}`}>{formatCurrency(record.remaining)}</dd></div>
+              <div><dt className="text-slate-500">Payments</dt><dd className="font-medium">{record.payments.length}</dd></div>
+            </dl>
+          </article>
+        ))}
       </div>
     </div>
   );

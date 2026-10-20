@@ -33,21 +33,22 @@ export default function Students() {
     return list;
   }, [state.students, search, filterStatus, filterCourse]);
 
+  const clearFilters = () => { setSearch(''); setFilterStatus(''); setFilterCourse(''); };
+
   return (
-    <div>
+    <div className="w-full min-w-0">
       <div className="page-header">
         <div>
           <h1 className="page-title">Students</h1>
           <p className="page-subtitle">{filtered.length} of {state.students.length} students</p>
         </div>
-        <button className="btn btn-primary" onClick={() => navigate('/students/new')}>
+        <button className="btn btn-primary w-full md:w-auto" onClick={() => navigate('/students/new')}>
           <UserPlus size={16} /> New Admission
         </button>
       </div>
 
-      {/* Filters */}
-      <div className="card p-4 mb-4 flex flex-wrap gap-3 items-center">
-        <div className="search-bar flex-1 min-w-[200px]">
+      <div className="card mb-4 grid grid-cols-1 gap-3 p-3 sm:p-4 md:grid-cols-3">
+        <div className="search-bar min-w-0">
           <Search size={15} className="search-icon" />
           <input
             className="input"
@@ -57,37 +58,22 @@ export default function Students() {
             id="student-search"
           />
         </div>
-        <select
-          className="input w-auto min-w-[140px]"
-          value={filterStatus}
-          onChange={e => setFilterStatus(e.target.value)}
-          id="filter-status"
-        >
+        <select className="input w-full min-w-0" value={filterCourse} onChange={e => setFilterCourse(e.target.value)} id="filter-course">
+          <option value="">All Courses</option>
+          {state.courses.map(course => <option key={course.id} value={course.id}>{course.name}</option>)}
+        </select>
+        <select className="input w-full min-w-0" value={filterStatus} onChange={e => setFilterStatus(e.target.value)} id="filter-status">
           <option value="">All Status</option>
           <option>Active</option>
           <option>Pending</option>
           <option>Inactive</option>
         </select>
-        <select
-          className="input w-auto min-w-[160px]"
-          value={filterCourse}
-          onChange={e => setFilterCourse(e.target.value)}
-          id="filter-course"
-        >
-          <option value="">All Courses</option>
-          {state.courses.map(c => (
-            <option key={c.id} value={c.id}>{c.name}</option>
-          ))}
-        </select>
         {(filterStatus || filterCourse || search) && (
-          <button className="btn btn-secondary btn-sm" onClick={() => { setSearch(''); setFilterStatus(''); setFilterCourse(''); }}>
-            Clear
-          </button>
+          <button className="btn btn-secondary w-full md:col-span-3 md:w-auto md:justify-self-end" onClick={clearFilters}>Clear</button>
         )}
       </div>
 
-      {/* Table */}
-      <div className="card">
+      <div className="card hidden md:block">
         <div className="table-wrapper border-0 rounded-none">
           <table>
             <thead>
@@ -104,48 +90,28 @@ export default function Students() {
             </thead>
             <tbody>
               {filtered.length === 0 ? (
-                <tr>
-                  <td colSpan={8} className="text-center py-8 text-slate-400">No students found</td>
-                </tr>
-              ) : filtered.map((s: Student) => {
-                const courses = s.courseIds.map(id => getCourse(id)?.name).filter(Boolean);
+                <tr><td colSpan={8} className="text-center py-8 text-slate-400">No students found</td></tr>
+              ) : filtered.map((student: Student) => {
+                const courses = student.courseIds.map(id => getCourse(id)?.name).filter(Boolean);
                 return (
-                  <tr key={s.id}>
+                  <tr key={student.id}>
+                    <td><span className="badge badge-blue">{student.admissionNo}</span></td>
                     <td>
-                      <span className="badge badge-blue">{s.admissionNo}</span>
+                      <p className="font-medium text-slate-700">{student.name}</p>
+                      <p className="text-xs text-slate-400">{student.gender} · {student.dob}</p>
                     </td>
-                    <td>
-                      <div>
-                        <p className="font-medium text-slate-700">{s.name}</p>
-                        <p className="text-xs text-slate-400">{s.gender} · {s.dob}</p>
-                      </div>
-                    </td>
-                    <td className="text-slate-600">{s.guardianName}</td>
+                    <td className="text-slate-600">{student.guardianName}</td>
                     <td className="text-slate-600">{courses.join(', ') || '—'}</td>
-                    <td className="text-slate-600">{s.phone}</td>
-                    <td className="font-medium">
-                      Rs {s.monthlyFee.toLocaleString()} / month
-                    </td>
-                    <td>
-                      <span className={`badge ${STATUS_COLORS[s.status] || 'badge-gray'}`}>{s.status}</span>
-                    </td>
+                    <td className="text-slate-600">{student.phone}</td>
+                    <td className="font-medium">Rs {student.monthlyFee.toLocaleString()} / month</td>
+                    <td><span className={`badge ${STATUS_COLORS[student.status] || 'badge-gray'}`}>{student.status}</span></td>
                     <td>
                       <div className="flex items-center gap-1">
-                        <button
-                          className="btn btn-icon btn-secondary btn-sm"
-                          title="View Profile"
-                          onClick={() => navigate(`/students/${s.id}`)}
-                          id={`view-student-${s.id}`}
-                        >
-                          <Eye size={14} />
+                        <button className="btn btn-icon btn-secondary" title="View Profile" aria-label={`View ${student.name}`} onClick={() => navigate(`/students/${student.id}`)} id={`view-student-${student.id}`}>
+                          <Eye size={16} />
                         </button>
-                        <button
-                          className="btn btn-icon btn-secondary btn-sm"
-                          title="Edit"
-                          onClick={() => navigate(`/students/${s.id}?tab=edit`)}
-                          id={`edit-student-${s.id}`}
-                        >
-                          <Edit2 size={14} />
+                        <button className="btn btn-icon btn-secondary" title="Edit" aria-label={`Edit ${student.name}`} onClick={() => navigate(`/students/${student.id}?tab=edit`)} id={`edit-student-${student.id}`}>
+                          <Edit2 size={16} />
                         </button>
                       </div>
                     </td>
@@ -155,6 +121,43 @@ export default function Students() {
             </tbody>
           </table>
         </div>
+      </div>
+
+      <div className="space-y-3 md:hidden">
+        {filtered.length === 0 ? (
+          <div className="card p-6 text-center text-slate-400">No students found</div>
+        ) : filtered.map(student => {
+          const courses = student.courseIds.map(id => getCourse(id)?.name).filter(Boolean);
+          return (
+            <article key={student.id} className="card min-w-0 p-4">
+              <div className="flex min-w-0 items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <h2 className="break-words font-semibold text-slate-800">{student.name}</h2>
+                  <p className="mt-1 text-sm text-slate-500">{student.admissionNo}</p>
+                </div>
+                <span className={`badge shrink-0 ${STATUS_COLORS[student.status] || 'badge-gray'}`}>{student.status}</span>
+              </div>
+              <dl className="mt-4 grid grid-cols-[auto_1fr] gap-x-3 gap-y-2 text-sm">
+                <dt className="text-slate-500">Course</dt>
+                <dd className="break-words text-right text-slate-700">{courses.join(', ') || '—'}</dd>
+                <dt className="text-slate-500">Guardian</dt>
+                <dd className="break-words text-right text-slate-700">{student.guardianName}</dd>
+                <dt className="text-slate-500">Phone</dt>
+                <dd className="break-all text-right text-slate-700">{student.phone}</dd>
+                <dt className="text-slate-500">Monthly Fee</dt>
+                <dd className="text-right font-medium text-slate-800">Rs {student.monthlyFee.toLocaleString()} / month</dd>
+              </dl>
+              <div className="mt-4 grid grid-cols-2 gap-2 border-t border-slate-100 pt-3">
+                <button className="btn btn-secondary justify-center" onClick={() => navigate(`/students/${student.id}`)} id={`view-student-mobile-${student.id}`}>
+                  <Eye size={16} /> View
+                </button>
+                <button className="btn btn-secondary justify-center" onClick={() => navigate(`/students/${student.id}?tab=edit`)} id={`edit-student-mobile-${student.id}`}>
+                  <Edit2 size={16} /> Edit
+                </button>
+              </div>
+            </article>
+          );
+        })}
       </div>
     </div>
   );

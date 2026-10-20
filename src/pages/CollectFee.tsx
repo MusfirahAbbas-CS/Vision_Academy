@@ -127,7 +127,7 @@ export default function CollectFee() {
   };
 
   return (
-    <div className="max-w-4xl">
+    <div className="w-full min-w-0 max-w-4xl">
       <div className="page-header">
         <div>
           <h1 className="page-title">Collect Fee</h1>
@@ -139,7 +139,7 @@ export default function CollectFee() {
         {/* Left: Student Search + Fee Info */}
         <div className="lg:col-span-3 space-y-4">
           {/* Student Search */}
-          <div className="card p-5">
+          <div className="card p-4 sm:p-5">
             <label className="label">Search Student</label>
             <div className="search-bar mb-2">
               <Search size={15} className="search-icon" />
@@ -170,7 +170,7 @@ export default function CollectFee() {
 
           {/* Student Info + Fee Details */}
           {student && (
-            <div className="card p-5">
+            <div className="card min-w-0 p-4 sm:p-5">
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h3 className="font-semibold text-slate-700">{student.name}</h3>
@@ -229,7 +229,7 @@ export default function CollectFee() {
 
         {/* Right: Payment Form */}
         <div className="lg:col-span-2">
-          <div className="card p-5 sticky top-20">
+          <div className="card min-w-0 p-4 sm:p-5 lg:sticky lg:top-20">
             <h3 className="font-semibold text-slate-700 mb-4 flex items-center gap-2">
               <CreditCard size={16} className="text-blue-500" /> Record Payment
             </h3>
@@ -270,7 +270,7 @@ export default function CollectFee() {
                       <button
                         key={m}
                         type="button"
-                        className={`text-xs py-2 px-3 rounded border transition-all ${
+                        className={`min-h-11 px-3 text-sm rounded border transition-all ${
                           method === m
                             ? 'bg-blue-600 text-white border-blue-600'
                             : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300'

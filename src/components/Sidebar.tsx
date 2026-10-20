@@ -72,9 +72,10 @@ export default function Sidebar({ onClose }: SidebarProps) {
         </div>
         <button
           onClick={onClose}
-          className="lg:hidden p-1.5 rounded hover:bg-slate-100 text-slate-500"
+          className="flex h-10 w-10 items-center justify-center rounded text-slate-500 hover:bg-slate-100 md:hidden"
+          aria-label="Close navigation menu"
         >
-          <X size={16} />
+          <X size={18} />
         </button>
       </div>
 

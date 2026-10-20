@@ -79,7 +79,7 @@ export default function NewAdmission() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
-        <div className="card p-6">
+        <div className="card p-4 sm:p-6">
           <div className="flex items-center gap-2 mb-4">
             <User size={16} className="text-blue-500" />
             <h2 className="section-title mb-0 border-0 pb-0">Personal Information</h2>
@@ -95,17 +95,17 @@ export default function NewAdmission() {
             <div><label className="label">Student Phone *</label><input name="phone" className="input" required placeholder="03XXXXXXXXX" value={form.phone} onChange={handleChange} /></div>
             <div><label className="label">Guardian Phone *</label><input name="guardianPhone" className="input" required placeholder="03XXXXXXXXX" value={form.guardianPhone} onChange={handleChange} /></div>
             <div><label className="label">Email</label><input name="email" type="email" className="input" value={form.email} onChange={handleChange} /></div>
-            <div><label className="label">Address</label><input name="address" className="input" value={form.address} onChange={handleChange} /></div>
+            <div className="md:col-span-2"><label className="label">Address</label><input name="address" className="input" value={form.address} onChange={handleChange} /></div>
           </div>
         </div>
 
-        <div className="card p-6">
+        <div className="card p-4 sm:p-6">
           <div className="flex items-center gap-2 mb-4">
             <BookOpen size={16} className="text-blue-500" />
             <h2 className="section-title mb-0 border-0 pb-0">Course Enrollment</h2>
           </div>
           <p className="text-sm text-slate-500 mb-3">Select one or more courses. Each course costs {formatCurrency(COURSE_MONTHLY_FEE)} per month.</p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {state.courses.map(course => (
               <label key={course.id} className="flex items-center justify-between gap-3 rounded-lg border border-slate-200 p-3 cursor-pointer">
                 <span className="flex items-center gap-2 text-sm font-medium text-slate-700">
@@ -134,7 +134,7 @@ export default function NewAdmission() {
           </div>
         </div>
 
-        <div className="card p-6">
+        <div className="card p-4 sm:p-6">
           <div className="flex items-center gap-2 mb-4">
             <DollarSign size={16} className="text-blue-500" />
             <h2 className="section-title mb-0 border-0 pb-0">Monthly Fee</h2>
@@ -145,9 +145,9 @@ export default function NewAdmission() {
           </div>
         </div>
 
-        <div className="flex justify-end gap-3">
-          <button type="button" className="btn btn-secondary" onClick={() => navigate('/students')}>Cancel</button>
-          <button type="submit" className="btn btn-primary" id="submit-admission"><Save size={16} /> Save Admission</button>
+        <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+          <button type="button" className="btn btn-secondary w-full justify-center sm:w-auto" onClick={() => navigate('/students')}>Cancel</button>
+          <button type="submit" className="btn btn-primary w-full justify-center sm:w-auto" id="submit-admission"><Save size={16} /> Save Admission</button>
         </div>
       </form>
     </div>

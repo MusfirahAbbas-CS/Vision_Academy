@@ -147,7 +147,7 @@ export default function Dashboard() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
         <StatCard icon={<Users size={18} className="text-blue-600" />} label="Total Students" value={String(stats.total)} color="bg-blue-50" />
         <StatCard icon={<UserCheck size={18} className="text-green-600" />} label="Active Students" value={String(stats.active)} color="bg-green-50" />
         <StatCard icon={<Banknote size={18} className="text-emerald-600" />} label="Today's Collection" value={formatCurrency(stats.todayCollection)} color="bg-emerald-50" />
@@ -159,9 +159,9 @@ export default function Dashboard() {
       </div>
 
       {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 mb-6">
         {/* Monthly Collection */}
-        <div className="card p-5 lg:col-span-2">
+        <div className="card min-w-0 p-4 sm:p-5 lg:col-span-2">
           <h3 className="text-sm font-semibold text-slate-700 mb-4">Monthly Fee Collection</h3>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={monthlyChartData} barSize={32}>
@@ -179,7 +179,7 @@ export default function Dashboard() {
         </div>
 
         {/* Fee Status Pie */}
-        <div className="card p-5">
+        <div className="card min-w-0 p-4 sm:p-5">
           <h3 className="text-sm font-semibold text-slate-700 mb-4">Fee Status Distribution</h3>
           <ResponsiveContainer width="100%" height={220}>
             <PieChart>
@@ -208,8 +208,8 @@ export default function Dashboard() {
       </div>
 
       {/* Course Revenue + Recent Payments */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-        <div className="card p-5">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 mb-6">
+        <div className="card min-w-0 p-4 sm:p-5">
           <h3 className="text-sm font-semibold text-slate-700 mb-4">Course-wise Revenue</h3>
           <ResponsiveContainer width="100%" height={200}>
             <BarChart data={courseRevenueData} layout="vertical" barSize={14}>
@@ -227,7 +227,7 @@ export default function Dashboard() {
         </div>
 
         {/* Recent Payments */}
-        <div className="card lg:col-span-2">
+        <div className="card min-w-0 lg:col-span-2">
           <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
             <h3 className="text-sm font-semibold text-slate-700">Recent Payments</h3>
             <button className="text-xs text-blue-600 hover:underline flex items-center gap-1" onClick={() => navigate('/fee-records')}>
@@ -238,7 +238,7 @@ export default function Dashboard() {
             {recentPayments.map(p => {
               const student = state.students.find(s => s.id === p.studentId);
               return (
-                <div key={p.id} className="flex items-center justify-between px-5 py-3">
+                <div key={p.id} className="flex items-center justify-between gap-3 px-4 py-3 sm:px-5">
                   <div className="flex items-center gap-3">
                     <div className="w-7 h-7 bg-blue-50 rounded-full flex items-center justify-center">
                       <CreditCard size={13} className="text-blue-500" />

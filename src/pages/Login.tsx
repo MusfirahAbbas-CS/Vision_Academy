@@ -48,7 +48,7 @@ export default function Login() {
         </div>
 
         {/* Card */}
-        <div className="card p-8">
+        <div className="card p-5 sm:p-8">
           <h2 className="text-lg font-semibold text-slate-700 mb-6">Sign in to your account</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -86,7 +86,7 @@ export default function Login() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  className="absolute right-1 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center text-slate-400 hover:text-slate-600"
                 >
                   {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                 </button>

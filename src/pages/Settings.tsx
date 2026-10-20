@@ -29,7 +29,7 @@ export default function SettingsPage() {
   ];
 
   return (
-    <div className="max-w-2xl">
+    <div className="w-full min-w-0 max-w-2xl">
       <div className="page-header">
         <div>
           <h1 className="page-title">Settings</h1>
@@ -37,7 +37,7 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      <div className="card p-6 space-y-5">
+      <div className="card space-y-5 p-4 sm:p-6">
         {/* Academy Logo Placeholder */}
         <div className="flex items-center gap-4 pb-5 border-b border-slate-100">
           <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center">
@@ -52,7 +52,7 @@ export default function SettingsPage() {
 
         <div className="form-grid">
           {fields.map(f => (
-            <div key={f.name} className={f.name === 'address' ? 'col-span-2' : ''}>
+            <div key={f.name} className={f.name === 'address' ? 'md:col-span-2' : ''}>
               <label className="label">{f.label}</label>
               <input
                 id={`settings-${f.name}`}
@@ -84,7 +84,7 @@ export default function SettingsPage() {
         </div>
 
         <div className="flex justify-end">
-          <button className="btn btn-primary" onClick={handleSave} id="save-settings-btn">
+          <button className="btn btn-primary w-full justify-center sm:w-auto" onClick={handleSave} id="save-settings-btn">
             <Save size={16} /> Save Settings
           </button>
         </div>

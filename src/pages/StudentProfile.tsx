@@ -95,7 +95,7 @@ export default function StudentProfile() {
       </div>
 
       {/* Quick stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
         {[
           { label: 'Monthly Fee', value: formatCurrency(student.monthlyFee), color: 'text-blue-600' },
           { label: 'Total Paid', value: formatCurrency(totalPaid), color: 'text-green-600' },
@@ -111,7 +111,7 @@ export default function StudentProfile() {
 
       {/* Tabs */}
       <div className="card">
-        <div className="tabs px-4 pt-2">
+        <div className="tabs overflow-x-auto px-2 pt-2 sm:px-4">
           {tabs.map(t => (
             <button
               key={t.id}
@@ -123,7 +123,7 @@ export default function StudentProfile() {
           ))}
         </div>
 
-        <div className="p-6">
+        <div className="p-4 sm:p-6">
           {/* Overview Tab */}
           {activeTab === 'overview' && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -262,13 +262,13 @@ export default function StudentProfile() {
                     <option>Active</option><option>Pending</option><option>Inactive</option>
                   </select>
                 </div>
-                <div className="col-span-2">
+                <div className="md:col-span-2">
                   <label className="label">Address</label>
                   <input className="input" value={editForm.address || ''} onChange={e => setEditForm(f => ({ ...f, address: e.target.value }))} />
                 </div>
-                <div className="col-span-2">
+                <div className="md:col-span-2">
                   <label className="label">Courses ({formatCurrency(COURSE_MONTHLY_FEE)} per course / month)</label>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     {state.courses.map(course => (
                       <label key={course.id} className="flex items-center gap-2 text-sm text-slate-700">
                         <input
