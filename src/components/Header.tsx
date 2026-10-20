@@ -21,8 +21,9 @@ export default function Header({ onMenuClick }: HeaderProps) {
     <header className="sticky top-0 z-30 flex h-14 w-full items-center justify-between border-b border-slate-200 bg-white px-3 sm:px-4 md:px-6">
       <div className="flex min-w-0 items-center gap-2 md:gap-3">
         <button
+          type="button"
           onClick={onMenuClick}
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-slate-600 hover:bg-slate-100 md:hidden"
+          className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-md text-slate-600 hover:bg-slate-100 md:hidden"
           aria-label="Open navigation menu"
         >
           <Menu size={20} />

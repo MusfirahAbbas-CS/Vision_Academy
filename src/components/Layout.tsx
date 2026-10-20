@@ -7,7 +7,7 @@ export default function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const closeSidebar = () => setSidebarOpen(false);
-  const toggleSidebar = () => setSidebarOpen((prev) => !prev);
+  const openSidebar = () => setSidebarOpen(true);
 
   return (
     <div className="app-shell flex min-h-screen w-full">
@@ -28,7 +28,7 @@ export default function Layout() {
       </aside>
 
       <div className="main-content flex min-w-0 flex-1 flex-col">
-        <Header onMenuClick={toggleSidebar} />
+        <Header onMenuClick={openSidebar} />
         <main className="min-w-0 flex-1 bg-slate-50 p-3 sm:p-4 md:p-6">
           <Outlet />
         </main>

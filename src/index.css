@@ -94,8 +94,9 @@
   background: rgba(15, 23, 42, 0.45);
   border: 0;
   padding: 0;
-  z-index: 30;
+  z-index: 40;
   cursor: pointer;
+  display: block;
 }
 
 @media (max-width: 767px) {
@@ -103,6 +104,13 @@
     width: min(var(--sidebar-width), calc(100vw - 3rem));
     transform: translateX(-100%);
     visibility: visible;
+    z-index: 50;
+  }
+
+  @media (min-width: 768px) {
+    .sidebar-overlay {
+      display: none;
+    }
   }
 
   .sidebar-open {
@@ -550,19 +558,4 @@ select.input {
   background-repeat: no-repeat;
   background-position: right 10px center;
   padding-right: 32px;
-}
-
-/* Overlay for mobile sidebar */
-.sidebar-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.4);
-  z-index: 35;
-  display: none;
-}
-
-@media (max-width: 767px) {
-  .sidebar-overlay.active {
-    display: block;
-  }
 }
