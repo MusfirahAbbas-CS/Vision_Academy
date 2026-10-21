@@ -17,14 +17,14 @@ function StatCard({ icon, label, value, sub, color }: {
   icon: React.ReactNode; label: string; value: string; sub?: string; color: string;
 }) {
   return (
-    <div className="stat-card">
+    <div className="stat-card min-w-0 p-3 sm:p-4 md:p-5 lg:px-6">
       <div className="flex items-start justify-between">
-        <div>
-          <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">{label}</p>
-          <p className="text-2xl font-bold text-slate-800">{value}</p>
+        <div className="min-w-0">
+          <p className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-slate-500 sm:text-xs">{label}</p>
+          <p className="break-words text-lg font-bold text-slate-800 sm:text-2xl">{value}</p>
           {sub && <p className="text-xs text-slate-400 mt-1">{sub}</p>}
         </div>
-        <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${color}`}>
+        <div className={`ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl sm:h-10 sm:w-10 ${color}`}>
           {icon}
         </div>
       </div>
@@ -147,7 +147,7 @@ export default function Dashboard() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
+      <div className="mb-5 grid grid-cols-1 min-[360px]:grid-cols-2 gap-3 sm:gap-4 md:mb-6 md:grid-cols-2 lg:grid-cols-4">
         <StatCard icon={<Users size={18} className="text-blue-600" />} label="Total Students" value={String(stats.total)} color="bg-blue-50" />
         <StatCard icon={<UserCheck size={18} className="text-green-600" />} label="Active Students" value={String(stats.active)} color="bg-green-50" />
         <StatCard icon={<Banknote size={18} className="text-emerald-600" />} label="Today's Collection" value={formatCurrency(stats.todayCollection)} color="bg-emerald-50" />
@@ -159,11 +159,11 @@ export default function Dashboard() {
       </div>
 
       {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 mb-6">
+      <div className="mb-5 grid grid-cols-1 gap-3 sm:gap-4 md:mb-6 lg:grid-cols-3">
         {/* Monthly Collection */}
-        <div className="card min-w-0 p-4 sm:p-5 lg:col-span-2">
+        <div className="card min-w-0 p-3 sm:p-5 lg:col-span-2">
           <h3 className="text-sm font-semibold text-slate-700 mb-4">Monthly Fee Collection</h3>
-          <ResponsiveContainer width="100%" height={220}>
+          <ResponsiveContainer width="100%" height={230}>
             <BarChart data={monthlyChartData} barSize={32}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
               <XAxis dataKey="name" tick={{ fontSize: 12, fill: '#94a3b8' }} axisLine={false} tickLine={false} />
@@ -179,9 +179,9 @@ export default function Dashboard() {
         </div>
 
         {/* Fee Status Pie */}
-        <div className="card min-w-0 p-4 sm:p-5">
+        <div className="card min-w-0 p-3 sm:p-5">
           <h3 className="text-sm font-semibold text-slate-700 mb-4">Fee Status Distribution</h3>
-          <ResponsiveContainer width="100%" height={220}>
+          <ResponsiveContainer width="100%" height={230}>
             <PieChart>
               <Pie
                 data={feeStatusData}
@@ -208,10 +208,10 @@ export default function Dashboard() {
       </div>
 
       {/* Course Revenue + Recent Payments */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4 mb-6">
-        <div className="card min-w-0 p-4 sm:p-5">
+      <div className="mb-5 grid grid-cols-1 gap-3 sm:gap-4 md:mb-6 lg:grid-cols-3">
+        <div className="card min-w-0 p-3 sm:p-5">
           <h3 className="text-sm font-semibold text-slate-700 mb-4">Course-wise Revenue</h3>
-          <ResponsiveContainer width="100%" height={200}>
+          <ResponsiveContainer width="100%" height={220}>
             <BarChart data={courseRevenueData} layout="vertical" barSize={14}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" horizontal={false} />
               <XAxis type="number" tick={{ fontSize: 11, fill: '#94a3b8' }} axisLine={false} tickLine={false}
@@ -228,27 +228,49 @@ export default function Dashboard() {
 
         {/* Recent Payments */}
         <div className="card min-w-0 lg:col-span-2">
-          <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+          <div className="flex items-center justify-between gap-2 border-b border-slate-100 px-4 py-4 sm:px-5">
             <h3 className="text-sm font-semibold text-slate-700">Recent Payments</h3>
             <button className="text-xs text-blue-600 hover:underline flex items-center gap-1" onClick={() => navigate('/fee-records')}>
               View all <ArrowRight size={12} />
             </button>
           </div>
-          <div className="divide-y divide-slate-50">
+          <div className="divide-y divide-slate-50 md:hidden">
             {recentPayments.map(p => {
               const student = state.students.find(s => s.id === p.studentId);
               return (
-                <div key={p.id} className="flex items-center justify-between gap-3 px-4 py-3 sm:px-5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-7 h-7 bg-blue-50 rounded-full flex items-center justify-center">
+                <article key={p.id} className="flex min-w-0 items-center justify-between gap-2 px-3 py-3 sm:px-5">
+                  <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-50">
                       <CreditCard size={13} className="text-blue-500" />
                     </div>
-                    <div>
-                      <p className="text-sm font-medium text-slate-700">{student?.name || 'Unknown'}</p>
-                      <p className="text-xs text-slate-400">{p.receiptNo} · {p.method}</p>
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium text-slate-700">{student?.name || 'Unknown'}</p>
+                      <p className="truncate text-xs text-slate-400">{p.receiptNo} · {p.method}</p>
                     </div>
                   </div>
-                  <div className="text-right">
+                  <div className="shrink-0 text-right">
+                    <p className="text-sm font-semibold text-green-600">{formatCurrency(p.amount)}</p>
+                    <p className="text-xs text-slate-400">{p.date}</p>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+          <div className="hidden divide-y divide-slate-50 md:block">
+            {recentPayments.map(p => {
+              const student = state.students.find(s => s.id === p.studentId);
+              return (
+                <div key={p.id} className="flex items-center justify-between gap-3 px-5 py-3">
+                  <div className="flex min-w-0 items-center gap-3">
+                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-50">
+                      <CreditCard size={13} className="text-blue-500" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-medium text-slate-700">{student?.name || 'Unknown'}</p>
+                      <p className="truncate text-xs text-slate-400">{p.receiptNo} · {p.method}</p>
+                    </div>
+                  </div>
+                  <div className="shrink-0 text-right">
                     <p className="text-sm font-semibold text-green-600">{formatCurrency(p.amount)}</p>
                     <p className="text-xs text-slate-400">{p.date}</p>
                   </div>
@@ -261,13 +283,13 @@ export default function Dashboard() {
 
       {/* Outstanding Students */}
       <div className="card">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+        <div className="flex items-center justify-between gap-2 border-b border-slate-100 px-4 py-4 sm:px-5">
           <h3 className="text-sm font-semibold text-slate-700">Outstanding Students</h3>
           <button className="text-xs text-blue-600 hover:underline flex items-center gap-1" onClick={() => navigate('/outstanding')}>
             View all <ArrowRight size={12} />
           </button>
         </div>
-        <div className="table-wrapper border-0 rounded-none">
+        <div className="hidden table-wrapper border-0 rounded-none md:block">
           <table>
             <thead>
               <tr>
@@ -297,6 +319,25 @@ export default function Dashboard() {
               ))}
             </tbody>
           </table>
+        </div>
+        <div className="divide-y divide-slate-100 md:hidden">
+          {outstandingStudents.length === 0 ? (
+            <p className="p-4 text-center text-sm text-slate-500">No outstanding fees</p>
+          ) : outstandingStudents.map(student => (
+            <article key={student.admissionNo} className="flex min-w-0 items-center justify-between gap-3 p-4">
+              <div className="min-w-0">
+                <h4 className="truncate text-sm font-semibold text-slate-800">{student.name}</h4>
+                <p className="mt-0.5 text-xs text-slate-500">{student.admissionNo} · {student.records} month{student.records === 1 ? '' : 's'} due</p>
+                <p className="mt-1 text-sm font-bold text-red-600">{formatCurrency(student.amount)}</p>
+              </div>
+              <button
+                className="btn btn-primary btn-sm min-h-10 shrink-0"
+                onClick={() => navigate('/collect-fee')}
+              >
+                <CreditCard size={14} /> Collect
+              </button>
+            </article>
+          ))}
         </div>
       </div>
     </div>

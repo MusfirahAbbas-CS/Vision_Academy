@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard, Users, UserPlus, BookOpen, DollarSign,
-  CreditCard, FileText, AlertCircle, BarChart2, Settings, GraduationCap, X
+  CreditCard, FileText, AlertCircle, BarChart2, Settings, GraduationCap
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
@@ -48,11 +48,7 @@ const navSections: NavSection[] = [
   },
 ];
 
-interface SidebarProps {
-  onClose: () => void;
-}
-
-export default function Sidebar({ onClose }: SidebarProps) {
+export default function Sidebar() {
   const { state } = useApp();
 
   return (
@@ -70,14 +66,6 @@ export default function Sidebar({ onClose }: SidebarProps) {
             <div className="text-xs text-slate-400">Management System</div>
           </div>
         </div>
-        <button
-          type="button"
-          onClick={() => onClose()}
-          className="relative z-[60] flex h-10 w-10 cursor-pointer items-center justify-center rounded text-slate-500 hover:bg-slate-100 md:hidden"
-          aria-label="Close sidebar"
-        >
-          <X size={18} />
-        </button>
       </div>
 
       {/* Navigation */}
@@ -91,7 +79,6 @@ export default function Sidebar({ onClose }: SidebarProps) {
               <NavLink
                 key={item.path}
                 to={item.path}
-                onClick={onClose}
                 className={({ isActive }) =>
                   `nav-item ${isActive ? 'nav-item-active' : ''}`
                 }
